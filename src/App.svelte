@@ -4,6 +4,13 @@
 
   let A = "AI";
   let P = "You";
+  var height = window.innerHeight;
+  var width = window.innerWidth;
+
+  window.onresize = () => {
+    height = window.innerHeight;
+    width = window.innerWidth;
+  }
 
   // Helper function to create multidimensional arrays
 	function createArray(length) {
@@ -15,8 +22,14 @@
 		}	
     	return arr;
 	}
-  
-let gameGrid = createArray(15, 15);
+let gameGrid;
+if (width > 650 && height > 650){
+  gameGrid = createArray(15, 15);
+}
+else {
+  gameGrid = createArray(10, 10);
+}
+
 var isYourTurn = true;
 var isGameOver = false;
 
@@ -57,7 +70,7 @@ function cellClicked(x, y) {
 
 <main>
 
-  <div class="gameGrid">
+  <div class={(width > height)? "gameGrid aspect-ratio-high" : "gameGrid aspect-ratio-low"}>
     {#each gameGrid as row, y}
       <div class="gameGridRow">
         {#each row as cell, x}
@@ -71,7 +84,7 @@ function cellClicked(x, y) {
               <div class="winning-row-cell ai">AI</div>
             {:else if cell == "winner-player"}
               <div class="winning-row-cell player">You</div>
-            {:else}
+            {:else if width > 650 && height > 650}
               {x}, {y}
             {/if}
           </div>
@@ -86,7 +99,8 @@ function cellClicked(x, y) {
 <style lang="scss">
   :root {
     --main-bg-color: #2a2a2a;
-    --board-bg-color: rgb(73, 10, 10);
+    //--board-bg-color: rgb(73, 10, 10);
+    --board-bg-color: rgb(94, 14, 14);
     --board-borders-color: black;
     --board-border-size: 2px;
     --focused-cell-outline-color: rgb(122, 255, 34);
@@ -104,11 +118,19 @@ function cellClicked(x, y) {
     font-size: 12px;
 
 		.gameGrid {
-			width: 90vh;
-			height: 90vh;
       border: solid var(--board-border-size) var(--board-borders-color);
       display: flex;
       flex-direction: column-reverse;
+
+      &.aspect-ratio-high {
+        width: 90vh;
+			  height: 90vh;
+      }
+
+      &.aspect-ratio-low {
+        width: 90vw;
+			  height: 90vw;
+      }
 
       .gameGridRow {
         height: 10%;

@@ -33,8 +33,8 @@ class AIPlayer {
         if (this.firstMove){
             let x, y;
             do {
-                x = this.randomIntFromInterval(4, 10);
-                y = this.randomIntFromInterval(4, 10);
+                x = this.randomIntFromInterval(4, 9);
+                y = this.randomIntFromInterval(4, 9);
             } while (gameGrid[y][x] != null)
             console.log(x + ', ' + y);
             gameGrid[y][x] = "A";
