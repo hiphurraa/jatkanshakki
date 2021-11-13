@@ -6,6 +6,9 @@
   let P = "You";
   var height = window.innerHeight;
   var width = window.innerWidth;
+  let gameGrid = createArray(15, 15);
+  var isYourTurn = true;
+  var isGameOver = false;
 
   window.onresize = () => {
     height = window.innerHeight;
@@ -22,16 +25,6 @@
 		}	
     	return arr;
 	}
-let gameGrid;
-if (width > 650 && height > 650){
-  gameGrid = createArray(15, 15);
-}
-else {
-  gameGrid = createArray(10, 10);
-}
-
-var isYourTurn = true;
-var isGameOver = false;
 
 function gameOver(winner) {
   isGameOver = true;
@@ -106,6 +99,14 @@ function cellClicked(x, y) {
     --focused-cell-outline-color: rgb(122, 255, 34);
     --ai-selected-cell-color: rgb(171, 41, 41);
     --player-selected-cell-color: rgb(78, 141, 38);
+
+    @media only screen and (max-width: 650px) {
+      --board-border-size: 1px;
+    }
+
+    @media only screen and (max-height: 650px) {
+      --board-border-size: 1px;
+    }
   }
 
 	main {
@@ -117,10 +118,20 @@ function cellClicked(x, y) {
     background-color: var(--main-bg-color);
     font-size: 12px;
 
+    @media only screen and (max-width: 650px) {
+      font-size : 8px;
+    }
+
+    @media only screen and (max-height: 650px) {
+      font-size : 8px;
+    }
+
 		.gameGrid {
       border: solid var(--board-border-size) var(--board-borders-color);
       display: flex;
       flex-direction: column-reverse;
+      max-height: 900px;
+      max-width: 900px;
 
       &.aspect-ratio-high {
         width: 90vh;
@@ -140,11 +151,12 @@ function cellClicked(x, y) {
         .gameGridCell {
           height: 100%;
           width: 10%;
-          box-shadow: 0 0 0 2px inset var(--board-borders-color);
+          box-shadow: 0 0 0 var(--board-border-size) inset var(--board-borders-color);
           background-color: var(--board-bg-color);
           display: flex;
           align-items: center;
 		      justify-content: center;
+          color: #555555;
 
           &:hover {
             box-shadow: 0 0 0 2px inset var(--focused-cell-outline-color);
