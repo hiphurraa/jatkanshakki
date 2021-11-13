@@ -1,5 +1,4 @@
 <script>
-	export let name;
   export let game;
   export let ai;
 
@@ -125,7 +124,6 @@ function cellClicked(x, y) {
           align-items: center;
 		      justify-content: center;
 
-          &.focused-cell,
           &:hover {
             box-shadow: 0 0 0 2px inset var(--focused-cell-outline-color);
             cursor: pointer;

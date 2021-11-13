@@ -5,7 +5,6 @@ import Game from './Game';
 const app = new App({
 	target: document.body,
 	props: {
-		name: 'world',
 		ai: new AIPlayer(),
 		game: new Game()
 	}
