@@ -180,7 +180,7 @@ let priorities = {
     "PPeAA": 0,
     "PPPww": 3,
     "PPPew": 3,
-    "PPPee": 5,
+    "PPPee": 10,
     "PPPeP": 0,
     "PPPeA": 3,
     "PPPPw": 999,
