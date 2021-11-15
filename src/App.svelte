@@ -7,8 +7,11 @@
   var height = window.innerHeight;
   var width = window.innerWidth;
   let gameGrid = createArray(15, 15);
-  var isYourTurn = true;
   var isGameOver = false;
+  let isYourTurn = true;
+
+  // AI starts
+  //gameGrid = ai.play(gameGrid);
 
   window.onresize = () => {
     height = window.innerHeight;
