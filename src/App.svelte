@@ -9,6 +9,7 @@
   let gameGrid = createArray(15, 15);
   var isGameOver = false;
   let isYourTurn = true;
+  let winnerPlayer = "";
 
   // AI starts
   //gameGrid = ai.play(gameGrid);
@@ -37,6 +38,8 @@
 
 function gameOver(winner) {
   gameGrid = game.showWinningRow(winner, gameGrid);
+  if (winner.row == "AAAAA") winnerPlayer = "AI";
+  else winnerPlayer = "You";
   setTimeout(() => {
     isGameOver = true;
   }, 1500);
@@ -109,9 +112,9 @@ function cellClicked(x, y) {
   {#if isGameOver}
     <div class="game-over-message">
       <div>
-        Game over!
+        {winnerPlayer} won!
       </div>
-      <button on:click={() => resetGame()}>New game</button>
+      <button on:click={() => resetGame()}>Try again</button>
     </div>
   {/if}
 </main>
@@ -161,22 +164,28 @@ function cellClicked(x, y) {
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      background-color:rgb(94, 94, 94);
+      background-color:#343434;
       color: white;
-      padding: 1rem;
+      padding: 1.3rem 1.5rem;
       display: flex;
       align-items: center;
       justify-content: center;
       flex-direction: column;
       border-radius: 0.3rem;
+      font-size: 18px;
+      box-shadow: 0 0 1rem black;
 
       button {
         background-color: #13a913;
         color: white;
         border: none;
-        margin-top: 0.5rem;
-        padding: 0.5rem;
+        margin-top: 1rem;
+        padding: 0.6rem 1.3rem;
         cursor: pointer;
+        font-size: 18px;
+        border-radius: 0.2rem;
+
+
 
         &:hover {
           background-color: #13a313;
@@ -186,7 +195,7 @@ function cellClicked(x, y) {
 
     @keyframes bg-glow {
       0% {
-        box-shadow: 0 0 5vh #202020, 0 0 0 2px var(--board-borders-color);
+        box-shadow: 0 0 5vh var(--board-bg-color), 0 0 0 2px var(--board-borders-color);
       }
       100% {
         box-shadow: 0 0 5vh #2c2c2c, 0 0 0 2px var(--board-borders-color);
