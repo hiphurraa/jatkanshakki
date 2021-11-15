@@ -59,12 +59,12 @@ function gameOver(winner) {
   }, 3000);
 }
 
-async function moveAiCursor(newPointLocation) {
-  while (aiCursor.x != newPointLocation.x || aiCursor.y != newPointLocation.y) {
-      if (aiCursor.x > newPointLocation.x) aiCursor.x = aiCursor.x - 1;
-      else if (aiCursor.x < newPointLocation.x) aiCursor.x = aiCursor.x + 1;
-      else if (aiCursor.y > newPointLocation.y) aiCursor.y = aiCursor.y - 1;
-      else if (aiCursor.y < newPointLocation.y) aiCursor.y = aiCursor.y + 1;
+async function moveAiCursor(newPoint) {
+  while (aiCursor.x != newPoint.x || aiCursor.y != newPoint.y) {
+      if (aiCursor.x > newPoint.x) aiCursor.x = aiCursor.x - 1;
+      else if (aiCursor.x < newPoint.x) aiCursor.x = aiCursor.x + 1;
+      else if (aiCursor.y > newPoint.y) aiCursor.y = aiCursor.y - 1;
+      else if (aiCursor.y < newPoint.y) aiCursor.y = aiCursor.y + 1;
       await sleep(100);
   }
 }
@@ -86,29 +86,103 @@ async function cellClicked(x, y) {
   }
 
   if (aiCursor.x == null) {
+    let left = randomIntFromInterval(0, 1);
     aiCursor = {
-      x: 14,
-      y: randomIntFromInterval(2, 7)
+      x: left? 0 : 14,
+      y: randomIntFromInterval(2, 12)
     }
   }
 
   // AI's turn
-  let newPointLocation = ai.play(gameGrid);
-  let waitTime = (Math.abs(newPointLocation.x - aiCursor.x) + Math.abs(newPointLocation.y - aiCursor.y)) * 100 + 600;
+  let [priorityOne, priorityTwo, priorityThree] = ai.play(gameGrid);
 
-  setTimeout(() => {
-    moveAiCursor(newPointLocation);
-  }, 300);
+  let pointOne = { x: priorityThree[1], y: priorityThree[2] };
+  let pointTwo = { x: priorityTwo[1], y: priorityTwo[2] };
+  let pointThree = { x: priorityOne[1], y: priorityOne[2] };
 
-  setTimeout(() => {
-    gameGrid[newPointLocation.y][newPointLocation.x] = "A";
-    winner = game.hasWinner(gameGrid);
-    if(winner){
-      gameOver(winner);
-      return;
-    }
-    isYourTurn = true;
-  }, waitTime);
+  let thinkingTimeOne = randomIntFromInterval(700, 1400);
+  let movingTimeOne = (Math.abs(pointOne.x - aiCursor.x) + Math.abs(pointOne.y - aiCursor.y)) * 100;
+
+  let thinkingTimeTwo = randomIntFromInterval(500, 1000);
+  let movingTimeTwo = (Math.abs(pointTwo.x - pointOne.x) + Math.abs(pointTwo.y - pointOne.y)) * 100;
+
+  let thinkingTimeThree = randomIntFromInterval(500, 1000);
+  let movingTimeThree = (Math.abs(pointThree.x - pointTwo.x) + Math.abs(pointTwo.y - aiCursor.y)) * 100;
+
+  let thinkingTimeFinal = randomIntFromInterval(500, 1000);
+
+  let pattern = randomIntFromInterval(1, 3);
+
+  if (priorityOne[0] >= 9999999999) pattern = 1;
+
+  if (pattern == 1) {
+    // First and final move
+    setTimeout(() => {
+        moveAiCursor(pointThree);
+      }, thinkingTimeOne);
+
+      setTimeout(() => {
+        gameGrid[pointThree.y][pointThree.x] = "A";
+        winner = game.hasWinner(gameGrid);
+        if(winner){
+          gameOver(winner);
+          return;
+        }
+        isYourTurn = true;
+      }, thinkingTimeOne + movingTimeOne + thinkingTimeFinal);
+  }
+
+  else if (pattern == 2) {
+    // First move
+    setTimeout(() => {
+        moveAiCursor(pointTwo);
+    }, thinkingTimeOne);
+
+    // Second and final move
+    setTimeout(() => {
+      moveAiCursor(pointThree);
+    }, thinkingTimeOne + movingTimeOne + thinkingTimeTwo);
+
+    setTimeout(() => {
+      gameGrid[pointThree.y][pointThree.x] = "A";
+      winner = game.hasWinner(gameGrid);
+      if(winner){
+        gameOver(winner);
+        return;
+      }
+      isYourTurn = true;
+    }, thinkingTimeOne + movingTimeOne + thinkingTimeTwo  + movingTimeTwo + thinkingTimeFinal );
+  }
+
+  else if (pattern == 3) {
+    // First move
+    setTimeout(() => {
+        moveAiCursor(pointOne);
+      }, thinkingTimeOne);
+
+      // Second move
+      setTimeout(() => {
+        moveAiCursor(pointTwo);
+      }, thinkingTimeOne + movingTimeOne + thinkingTimeTwo);
+
+      // Third move
+      setTimeout(() => {
+        moveAiCursor(pointThree);
+      }, thinkingTimeOne + movingTimeOne + thinkingTimeTwo  + movingTimeTwo + thinkingTimeThree);
+
+      setTimeout(() => {
+        gameGrid[pointThree.y][pointThree.x] = "A";
+        winner = game.hasWinner(gameGrid);
+        if(winner){
+          gameOver(winner);
+          return;
+        }
+        isYourTurn = true;
+      }, thinkingTimeOne + movingTimeOne + thinkingTimeTwo  + movingTimeTwo + thinkingTimeThree + movingTimeThree + thinkingTimeFinal );
+}
+
+  
+
 }
 
 </script>
@@ -163,8 +237,10 @@ async function cellClicked(x, y) {
     --board-bg-color: #0e0e0e;
     --board-borders-color: #282828;
     --board-border-size: 2px;
-    --ai-selected-cell-color: #a800ff;
-    --player-selected-cell-color: #eac300;
+    //--ai-selected-cell-color: #a800ff;
+    --ai-selected-cell-color: #ff0000;
+    //--player-selected-cell-color: #ffd400;
+    --player-selected-cell-color: #04ff00;
     --board-max-size: 800px;
 
     @media only screen and (max-width: 650px) {
@@ -268,12 +344,24 @@ async function cellClicked(x, y) {
 		      justify-content: center;
           color: #555555;
 
+          @keyframes player-cursor-glow {
+            0% { box-shadow: 0 0 2px 2px inset var(--player-selected-cell-color); }
+            100% { box-shadow: 0 0 2px 2px inset #028000; }
+          }
+
           &:hover {
+            animation: player-cursor-glow 1s linear infinite alternate;
             box-shadow: 0 0 2px 2px inset var(--player-selected-cell-color);
             cursor: pointer;
           }
 
+          @keyframes ai-cursor-glow {
+            0% { box-shadow: 0 0 2px 2px inset var(--ai-selected-cell-color); }
+            100% { box-shadow: 0 0 2px 2px inset rgb(143, 0, 0); }
+          }
+
           &.aiCursor {
+            animation: ai-cursor-glow 1s linear infinite alternate;
             box-shadow: 0 0 2px 2px inset var(--ai-selected-cell-color);
           }
 
@@ -293,8 +381,8 @@ async function cellClicked(x, y) {
             height: 70%;
 
             .figure-o {
-              width: 70%;
-              height: 70%;
+              width: 71%;
+              height: 71%;
               border-radius: 50%;
               background-color: var(--board-bg-color);
             }

@@ -6,7 +6,6 @@ import CheckForSpecialOffenive from "./SpecialOffensive";
 class AIPlayer {
 
     constructor (){
-        this.firstMove = true;
         this.scanner = new Scanner();
         this.turn = 1;
     }
@@ -168,23 +167,18 @@ class AIPlayer {
     }
 
     play(gameGrid) {
+        
+        let randX = this.randomIntFromInterval(4, 9);
+        let randY = this.randomIntFromInterval(4, 9);
 
-        // Randomize the first half of the time
-        if (this.firstMove){
-            this.firstMove = false;
-            if (this.randomIntFromInterval(1, 2) == 1 || true) {
-                let x, y;
-                do {
-                    x = this.randomIntFromInterval(4, 9);
-                    y = this.randomIntFromInterval(4, 9);
-                } while (gameGrid[y][x] != null)
-                //console.log("Turn " + this.turn + ' randomized');
-                this.turn++;
-                return {x, y};
-            }
-        }
+        do {
+            randX = this.randomIntFromInterval(4, 9);
+            randY = this.randomIntFromInterval(4, 9);
+        } while (gameGrid[randY][randX] != null)
 
-        var topPriority = { 0: [0, 0] };
+        let priorityOne = [1, randX, randX];
+        let priorityTwo = [1, this.randomIntFromInterval(4, 9), this.randomIntFromInterval(4, 9)];
+        let priorityThree = [1, this.randomIntFromInterval(4, 9), this.randomIntFromInterval(4, 9)];
 
         for (let y = 0; y < gameGrid.length; y++) {
             let row = gameGrid[y];
@@ -193,22 +187,19 @@ class AIPlayer {
                 if (gameGrid[y][x] != null){
                     continue;
                 }
-                let priority = this.calculatePriority(gameGrid, x, y);
 
-                if (priority > Object.keys(topPriority)[0]) {
-                    let newTopPriority = {};
-                    newTopPriority[priority] = [x, y];
-                    topPriority = newTopPriority;
+                let priority = this.calculatePriority(gameGrid, x, y);
+                
+                if (priority > priorityOne[0]) {
+                    priorityThree = Array.from(priorityTwo);
+                    priorityTwo = Array.from(priorityOne);
+                    priorityOne = [priority, x, y];
                 }
             }
         }
 
-        //console.log("Turn " + this.turn + " priority: " + Object.keys(topPriority)[0]);
-
-        let x = Object.values(topPriority)[0][0];
-        let y = Object.values(topPriority)[0][1];
         this.turn++;
-        return {x, y};
+        return [ priorityOne, priorityTwo, priorityThree ];
     }
 }
 
