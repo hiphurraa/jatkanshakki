@@ -233,14 +233,14 @@ async function cellClicked(x, y) {
 
 <style lang="scss">
   :root {
-    --main-bg-color: #0c0c0c;
-    --board-bg-color: #0e0e0e;
-    --board-borders-color: #282828;
+    --main-bg-color: #1a1a1a;
+    --board-bg-color: #181818;
+    --board-borders-color: #585858;
     --board-border-size: 2px;
     //--ai-selected-cell-color: #a800ff;
     --ai-selected-cell-color: #ff0000;
-    //--player-selected-cell-color: #ffd400;
-    --player-selected-cell-color: #04ff00;
+    --player-selected-cell-color: #ffd400;
+    //--player-selected-cell-color: #04ff00;
     --board-max-size: 800px;
 
     @media only screen and (max-width: 650px) {
@@ -303,17 +303,8 @@ async function cellClicked(x, y) {
       }
     }
 
-    @keyframes bg-glow {
-      0% {
-        box-shadow: 0 0 5vh var(--board-bg-color), 0 0 0 2px var(--board-borders-color);
-      }
-      100% {
-        box-shadow: 0 0 5vh #2c2c2c, 0 0 0 2px var(--board-borders-color);
-      }
-    }
-
 		.gameGrid {
-      animation: bg-glow 2s linear infinite alternate;
+      box-shadow: 0 0 2vh 1vh black, 0 0 0 2px var(--board-borders-color);
       display: flex;
       flex-direction: column-reverse;
       max-height: var(--board-max-size);
@@ -344,25 +335,14 @@ async function cellClicked(x, y) {
 		      justify-content: center;
           color: #555555;
 
-          @keyframes player-cursor-glow {
-            0% { box-shadow: 0 0 2px 2px inset var(--player-selected-cell-color); }
-            100% { box-shadow: 0 0 2px 2px inset #028000; }
-          }
-
           &:hover {
-            animation: player-cursor-glow 1s linear infinite alternate;
-            box-shadow: 0 0 2px 2px inset var(--player-selected-cell-color);
+            box-shadow: 0 0 3px 3px inset var(--player-selected-cell-color);
             cursor: pointer;
-          }
-
-          @keyframes ai-cursor-glow {
-            0% { box-shadow: 0 0 2px 2px inset var(--ai-selected-cell-color); }
-            100% { box-shadow: 0 0 2px 2px inset rgb(143, 0, 0); }
           }
 
           &.aiCursor {
             animation: ai-cursor-glow 1s linear infinite alternate;
-            box-shadow: 0 0 2px 2px inset var(--ai-selected-cell-color);
+            box-shadow: 0 0 3px 3px inset var(--ai-selected-cell-color)
           }
 
           .ai-selected-cell,
