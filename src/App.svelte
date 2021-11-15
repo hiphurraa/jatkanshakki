@@ -10,6 +10,11 @@
   var isGameOver = false;
   let isYourTurn = true;
   let winnerPlayer = "";
+  let aiCursor = {
+    x: null,
+    y: null
+  }
+  
 
   // AI starts
   //gameGrid = ai.play(gameGrid);
@@ -19,11 +24,20 @@
     width = window.innerWidth;
   }
 
+  function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
   function resetGame() {
     gameGrid = createArray(15, 15);
     isGameOver = false;
     isYourTurn = true;
+    aiCursor = { x: null, y: null };
   }
+
+  function randomIntFromInterval(min, max) {
+        return Math.floor(Math.random() * (max - min + 1) + min)
+    }
 
   // Helper function to create multidimensional arrays
 	function createArray(length) {
@@ -42,10 +56,20 @@ function gameOver(winner) {
   else winnerPlayer = "You";
   setTimeout(() => {
     isGameOver = true;
-  }, 1500);
+  }, 3000);
 }
 
-function cellClicked(x, y) {
+async function moveAiCursor(newPointLocation) {
+  while (aiCursor.x != newPointLocation.x || aiCursor.y != newPointLocation.y) {
+      if (aiCursor.x > newPointLocation.x) aiCursor.x = aiCursor.x - 1;
+      else if (aiCursor.x < newPointLocation.x) aiCursor.x = aiCursor.x + 1;
+      else if (aiCursor.y > newPointLocation.y) aiCursor.y = aiCursor.y - 1;
+      else if (aiCursor.y < newPointLocation.y) aiCursor.y = aiCursor.y + 1;
+      await sleep(100);
+  }
+}
+
+async function cellClicked(x, y) {
   // Ignore if cell taken or not your turn
   if ((gameGrid[y][x] != null) || !isYourTurn || isGameOver) {
     return;
@@ -61,16 +85,30 @@ function cellClicked(x, y) {
     return;
   }
 
-  // AI's turn
-  gameGrid = ai.play(gameGrid);
-  
-  winner = game.hasWinner(gameGrid);
-  if(winner){
-    gameOver(winner);
-    return;
+  if (aiCursor.x == null) {
+    aiCursor = {
+      x: 14,
+      y: randomIntFromInterval(2, 7)
+    }
   }
 
-  isYourTurn = true;
+  // AI's turn
+  let newPointLocation = ai.play(gameGrid);
+  let waitTime = (Math.abs(newPointLocation.x - aiCursor.x) + Math.abs(newPointLocation.y - aiCursor.y)) * 100 + 600;
+
+  setTimeout(() => {
+    moveAiCursor(newPointLocation);
+  }, 300);
+
+  setTimeout(() => {
+    gameGrid[newPointLocation.y][newPointLocation.x] = "A";
+    winner = game.hasWinner(gameGrid);
+    if(winner){
+      gameOver(winner);
+      return;
+    }
+    isYourTurn = true;
+  }, waitTime);
 }
 
 </script>
@@ -81,7 +119,7 @@ function cellClicked(x, y) {
     {#each gameGrid as row, y}
       <div class="gameGridRow">
         {#each row as cell, x}
-          <div class="gameGridCell" 
+          <div class={(aiCursor.x == x && aiCursor.y == y)? "gameGridCell aiCursor" : "gameGridCell"}
             on:click={() => cellClicked(x, y)}>
             {#if cell == "A"}
               <div class="ai-selected-cell">
@@ -122,15 +160,11 @@ function cellClicked(x, y) {
 <style lang="scss">
   :root {
     --main-bg-color: #0c0c0c;
-    //--board-bg-color: rgb(73, 10, 10);
-    // --board-bg-color: rgb(94, 14, 14);
-    --board-highlight-color: red;
     --board-bg-color: #0e0e0e;
     --board-borders-color: #282828;
     --board-border-size: 2px;
-    --focused-cell-outline-color: #b79800;
     --ai-selected-cell-color: #a800ff;
-    --player-selected-cell-color: #b79800;
+    --player-selected-cell-color: #eac300;
     --board-max-size: 800px;
 
     @media only screen and (max-width: 650px) {
@@ -235,13 +269,16 @@ function cellClicked(x, y) {
           color: #555555;
 
           &:hover {
-            box-shadow: 0 0 2px 2px inset var(--focused-cell-outline-color);
+            box-shadow: 0 0 2px 2px inset var(--player-selected-cell-color);
             cursor: pointer;
           }
 
+          &.aiCursor {
+            box-shadow: 0 0 2px 2px inset var(--ai-selected-cell-color);
+          }
+
           .ai-selected-cell,
-          .player-selected-cell,
-          .winning-row-cell {
+          .player-selected-cell {
             color: white;
             cursor: default;
             display: flex;

@@ -18,6 +18,8 @@ class AIPlayer {
     checkForWildCards(up, upRight, right, rightDown, down, downLeft, left, leftUp) {
 
         var priority = 0;
+        
+        /* OFFENSIVE */
 
         // Opposites
         if (up.substring(0, 1) == "A" && down.substring(0, 3) == "AAA") priority += 999999;
@@ -38,6 +40,48 @@ class AIPlayer {
         if (downLeft.substring(0, 2) == "AA" && upRight.substring(0, 2) == "AA") priority += 999999;
         if (left.substring(0, 2) == "AA" && right.substring(0, 2) == "AA") priority += 999999;
         if (leftUp.substring(0, 2) == "AA" && rightDown.substring(0, 2) == "AA") priority += 999999;
+
+        // 90 deg
+        if (up.substring(0,3) == "AAe" && right.substring(0, 4) == "AAAe") priority += 333;
+        if (upRight.substring(0,3) == "AAe" && rightDown.substring(0, 4) == "AAAe") priority += 333;
+        if (right.substring(0,3) == "AAe" && down.substring(0, 4) == "AAAe") priority += 333;
+        if (rightDown.substring(0,3) == "AAe" && downLeft.substring(0, 4) == "AAAe") priority += 333;
+        if (down.substring(0,3) == "AAe" && left.substring(0, 4) == "AAAe") priority += 333;
+        if (downLeft.substring(0,3) == "AAe" && leftUp.substring(0, 4) == "AAAe") priority += 333;
+        if (left.substring(0,3) == "AAe" && up.substring(0, 4) == "AAAe") priority += 333;
+        if (leftUp.substring(0,3) == "AAe" && upRight.substring(0, 4) == "AAAe") priority += 333;
+
+        // Opposites
+        if (up.substring(0, 3) == "AAe" && down.substring(0, 2) == "Ae") priority += 333;
+        if (upRight.substring(0, 3) == "AAe" && downLeft.substring(0, 2) == "Ae") priority += 333;
+        if (right.substring(0, 3) == "AAe" && left.substring(0, 2) == "Ae") priority += 333;
+        if (rightDown.substring(0, 3) == "AAe" && leftUp.substring(0, 2) == "Ae") priority += 333;
+        if (down.substring(0, 3) == "AAe" && up.substring(0, 2) == "Ae") priority += 333;
+        if (downLeft.substring(0, 3) == "AAe" && upRight.substring(0, 2) == "Ae") priority += 333;
+        if (left.substring(0, 3) == "AAe" && right.substring(0, 2) == "Ae") priority += 333;
+        if (leftUp.substring(0, 3) == "AAe" && rightDown.substring(0, 2) == "Ae") priority += 333;
+
+        // Opposites
+        if (up.substring(0, 1) == "e" && down.substring(0, 4) == "AAAe") priority += 333;
+        if (upRight.substring(0, 1) == "e" && downLeft.substring(0, 4) == "AAAe") priority += 333;
+        if (right.substring(0, 1) == "e" && left.substring(0, 4) == "AAAe") priority += 333;
+        if (rightDown.substring(0, 1) == "e" && leftUp.substring(0, 4) == "AAAe") priority += 333;
+        if (down.substring(0, 1) == "e" && up.substring(0, 4) == "AAAe") priority += 333;
+        if (downLeft.substring(0, 1) == "e" && upRight.substring(0, 4) == "AAAe") priority += 333;
+        if (left.substring(0, 1) == "e" && right.substring(0, 4) == "AAAe") priority += 333;
+        if (leftUp.substring(0, 1) == "e" && rightDown.substring(0, 4) == "AAAe") priority += 333;
+
+        // 90 deg & opposite
+        if (up.substring(0,3) == "AAe" && down.substring(0, 1) == "e" && right.substring(0,3) == "AAe" && left.substring(0,1) == "e") priority += 70;
+        if (upRight.substring(0,3) == "AAe" && downLeft.substring(0, 1) == "e" && rightDown.substring(0,3) == "AAe" && leftUp.substring(0,1) == "e") priority += 70;
+        if (right.substring(0,3) == "AAe" && left.substring(0, 1) == "e" && down.substring(0,3) == "AAe" && up.substring(0,1) == "e") priority += 70;
+        if (rightDown.substring(0,3) == "AAe" && leftUp.substring(0, 1) == "e" && downLeft.substring(0,3) == "AAe" && upRight.substring(0,1) == "e") priority += 70;
+        if (down.substring(0,3) == "AAe" && up.substring(0, 1) == "e" && left.substring(0,3) == "AAe" && right.substring(0,1) == "e") priority += 70;
+        if (downLeft.substring(0,3) == "AAe" && upRight.substring(0, 1) == "e" && leftUp.substring(0,3) == "AAe" && rightDown.substring(0,1) == "e") priority += 70;
+        if (left.substring(0,3) == "AAe" && right.substring(0, 1) == "e" && up.substring(0,3) == "AAe" && down.substring(0,1) == "e") priority += 70;
+        if (leftUp.substring(0,3) == "AAe" && rightDown.substring(0, 1) == "e" && upRight.substring(0,3) == "AAe" && downLeft.substring(0,1) == "e") priority += 70;
+
+        /* DEFENSIVE */
 
         // Opposites
         if (up.substring(0,1) == "P" && down.substring(0,3) == "PPP") priority += 999;
@@ -89,21 +133,6 @@ class AIPlayer {
         if (left.substring(0, 1) == "e" && right.substring(0, 4) == "PPPe") priority += 99;
         if (leftUp.substring(0, 1) == "e" && rightDown.substring(0, 4) == "PPPe") priority += 99;
 
-        // let specialOffensivePriority = CheckForSpecialOffenive(up, upRight, right, rightDown, down, downLeft, left, leftUp);
-        // if (specialOffensivePriority) return specialOffensivePriority;
-        // let specialDefensivePriority = CheckForSpecialDefensive(up, upRight, right, rightDown, down, downLeft, left, leftUp);
-        // if (specialDefensivePriority) return specialDefensivePriority;
-
-        // 90 deg & opposite
-        if (up.substring(0,3) == "AAe" && down.substring(0, 1) == "e" && right.substring(0,3) == "AAe" && left.substring(0,1) == "e") priority += 70;
-        if (upRight.substring(0,3) == "AAe" && downLeft.substring(0, 1) == "e" && rightDown.substring(0,3) == "AAe" && leftUp.substring(0,1) == "e") priority += 70;
-        if (right.substring(0,3) == "AAe" && left.substring(0, 1) == "e" && down.substring(0,3) == "AAe" && up.substring(0,1) == "e") priority += 70;
-        if (rightDown.substring(0,3) == "AAe" && leftUp.substring(0, 1) == "e" && downLeft.substring(0,3) == "AAe" && upRight.substring(0,1) == "e") priority += 70;
-        if (down.substring(0,3) == "AAe" && up.substring(0, 1) == "e" && left.substring(0,3) == "AAe" && right.substring(0,1) == "e") priority += 70;
-        if (downLeft.substring(0,3) == "AAe" && upRight.substring(0, 1) == "e" && leftUp.substring(0,3) == "AAe" && rightDown.substring(0,1) == "e") priority += 70;
-        if (left.substring(0,3) == "AAe" && right.substring(0, 1) == "e" && up.substring(0,3) == "AAe" && down.substring(0,1) == "e") priority += 70;
-        if (leftUp.substring(0,3) == "AAe" && rightDown.substring(0, 1) == "e" && upRight.substring(0,3) == "AAe" && downLeft.substring(0,1) == "e") priority += 70;
-
         // 90 deg & opposite
         if (up.substring(0,3) == "PPe" && down.substring(0, 1) == "e" && right.substring(0,3) == "PPe" && left.substring(0,1) == "e") priority += 60;
         if (upRight.substring(0,3) == "PPe" && downLeft.substring(0, 1) == "e" && rightDown.substring(0,3) == "PPe" && leftUp.substring(0,1) == "e") priority += 60;
@@ -113,6 +142,11 @@ class AIPlayer {
         if (downLeft.substring(0,3) == "PPe" && upRight.substring(0, 1) == "e" && leftUp.substring(0,3) == "PPe" && rightDown.substring(0,1) == "e") priority += 60;
         if (left.substring(0,3) == "PPe" && right.substring(0, 1) == "e" && up.substring(0,3) == "PPe" && down.substring(0,1) == "e") priority += 60;
         if (leftUp.substring(0,3) == "PPe" && rightDown.substring(0, 1) == "e" && upRight.substring(0,3) == "PPe" && downLeft.substring(0,1) == "e") priority += 60;
+
+        // let specialOffensivePriority = CheckForSpecialOffenive(up, upRight, right, rightDown, down, downLeft, left, leftUp);
+        // if (specialOffensivePriority) return specialOffensivePriority;
+        // let specialDefensivePriority = CheckForSpecialDefensive(up, upRight, right, rightDown, down, downLeft, left, leftUp);
+        // if (specialDefensivePriority) return specialDefensivePriority;
 
         return priority;
     }
@@ -134,6 +168,7 @@ class AIPlayer {
     }
 
     play(gameGrid) {
+
         // Randomize the first half of the time
         if (this.firstMove){
             this.firstMove = false;
@@ -143,13 +178,11 @@ class AIPlayer {
                     x = this.randomIntFromInterval(4, 9);
                     y = this.randomIntFromInterval(4, 9);
                 } while (gameGrid[y][x] != null)
-                gameGrid[y][x] = "A";
-                console.log("Turn " + this.turn + ' randomized');
+                //console.log("Turn " + this.turn + ' randomized');
                 this.turn++;
-                return gameGrid;
+                return {x, y};
             }
         }
-
 
         var topPriority = { 0: [0, 0] };
 
@@ -170,13 +203,12 @@ class AIPlayer {
             }
         }
 
-        console.log("Turn " + this.turn + " priority: " + Object.keys(topPriority)[0]);
+        //console.log("Turn " + this.turn + " priority: " + Object.keys(topPriority)[0]);
 
         let x = Object.values(topPriority)[0][0];
         let y = Object.values(topPriority)[0][1];
-        gameGrid[y][x] = "A";
         this.turn++;
-        return gameGrid;
+        return {x, y};
     }
 }
 
