@@ -18,6 +18,12 @@
     width = window.innerWidth;
   }
 
+  function resetGame() {
+    gameGrid = createArray(15, 15);
+    isGameOver = false;
+    isYourTurn = true;
+  }
+
   // Helper function to create multidimensional arrays
 	function createArray(length) {
 		var arr = new Array(length || 0),
@@ -30,8 +36,10 @@
 	}
 
 function gameOver(winner) {
-  isGameOver = true;
   gameGrid = game.showWinningRow(winner, gameGrid);
+  setTimeout(() => {
+    isGameOver = true;
+  }, 1500);
 }
 
 function cellClicked(x, y) {
@@ -73,15 +81,23 @@ function cellClicked(x, y) {
           <div class="gameGridCell" 
             on:click={() => cellClicked(x, y)}>
             {#if cell == "A"}
-              <div class="ai-selected-cell">AI</div>
-            {:else if cell == "P"}
-              <div class="player-selected-cell">You</div>
+              <div class="ai-selected-cell">
+                <div class="figure-o"></div>
+              </div>
             {:else if cell == "winner-ai"}
-              <div class="winning-row-cell ai">AI</div>
+            <div class="ai-selected-cell winning-row-cell-ai">
+              <div class="figure-o"></div>
+            </div>
+            {:else if cell == "P"}
+              <div class="player-selected-cell">
+                <div class="figure-x-1"></div><div class="figure-x-2"></div>
+              </div>
             {:else if cell == "winner-player"}
-              <div class="winning-row-cell player">You</div>
-            {:else if width > 650 && height > 650}
-              {x}, {y}
+              <div class="player-selected-cell winning-row-cell-player">
+                <div class="figure-x-1"></div><div class="figure-x-2"></div>
+              </div>
+            <!-- {:else if width > 650 && height > 650}
+              {x}, {y} -->
             {/if}
           </div>
         {/each}
@@ -90,18 +106,29 @@ function cellClicked(x, y) {
 
   </div>
 
+  {#if isGameOver}
+    <div class="game-over-message">
+      <div>
+        Game over!
+      </div>
+      <button on:click={() => resetGame()}>New game</button>
+    </div>
+  {/if}
 </main>
 
 <style lang="scss">
   :root {
-    --main-bg-color: #2a2a2a;
+    --main-bg-color: #0c0c0c;
     //--board-bg-color: rgb(73, 10, 10);
-    --board-bg-color: rgb(94, 14, 14);
-    --board-borders-color: black;
+    // --board-bg-color: rgb(94, 14, 14);
+    --board-highlight-color: red;
+    --board-bg-color: #0e0e0e;
+    --board-borders-color: #282828;
     --board-border-size: 2px;
-    --focused-cell-outline-color: rgb(122, 255, 34);
-    --ai-selected-cell-color: rgb(171, 41, 41);
-    --player-selected-cell-color: rgb(78, 141, 38);
+    --focused-cell-outline-color: #b79800;
+    --ai-selected-cell-color: #a800ff;
+    --player-selected-cell-color: #b79800;
+    --board-max-size: 800px;
 
     @media only screen and (max-width: 650px) {
       --board-border-size: 1px;
@@ -129,12 +156,49 @@ function cellClicked(x, y) {
       font-size : 8px;
     }
 
+    .game-over-message {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color:rgb(94, 94, 94);
+      color: white;
+      padding: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      border-radius: 0.3rem;
+
+      button {
+        background-color: #13a913;
+        color: white;
+        border: none;
+        margin-top: 0.5rem;
+        padding: 0.5rem;
+        cursor: pointer;
+
+        &:hover {
+          background-color: #13a313;
+        }
+      }
+    }
+
+    @keyframes bg-glow {
+      0% {
+        box-shadow: 0 0 5vh #202020, 0 0 0 2px var(--board-borders-color);
+      }
+      100% {
+        box-shadow: 0 0 5vh #2c2c2c, 0 0 0 2px var(--board-borders-color);
+      }
+    }
+
 		.gameGrid {
-      border: solid var(--board-border-size) var(--board-borders-color);
+      animation: bg-glow 2s linear infinite alternate;
       display: flex;
       flex-direction: column-reverse;
-      max-height: 900px;
-      max-width: 900px;
+      max-height: var(--board-max-size);
+      max-width: var(--board-max-size);
 
       &.aspect-ratio-high {
         width: 90vh;
@@ -154,7 +218,7 @@ function cellClicked(x, y) {
         .gameGridCell {
           height: 100%;
           width: 10%;
-          box-shadow: 0 0 0 var(--board-border-size) inset var(--board-borders-color);
+          box-shadow: 0 0 2px var(--board-border-size) inset var(--board-borders-color);
           background-color: var(--board-bg-color);
           display: flex;
           align-items: center;
@@ -162,16 +226,13 @@ function cellClicked(x, y) {
           color: #555555;
 
           &:hover {
-            box-shadow: 0 0 0 2px inset var(--focused-cell-outline-color);
+            box-shadow: 0 0 2px 2px inset var(--focused-cell-outline-color);
             cursor: pointer;
           }
 
           .ai-selected-cell,
           .player-selected-cell,
           .winning-row-cell {
-            width: 85%;
-            height: 85%;
-            border-radius: 50%;
             color: white;
             cursor: default;
             display: flex;
@@ -180,30 +241,58 @@ function cellClicked(x, y) {
           }
 
           .ai-selected-cell {
+            border-radius: 50%;
             background-color: var(--ai-selected-cell-color);
+            width: 70%;
+            height: 70%;
+
+            .figure-o {
+              width: 70%;
+              height: 70%;
+              border-radius: 50%;
+              background-color: var(--board-bg-color);
+            }
           }
 
           .player-selected-cell {
-            background-color: var(--player-selected-cell-color);
+            position: relative;
+            width: 80%;
+            height: 80%;
+
+            .figure-x-1 {
+              width: 100%;
+              height: 15%;
+              background-color: var(--player-selected-cell-color);
+              transform: rotate(45deg);
+              position:absolute;
+            }
+
+            .figure-x-2 {
+              width: 100%;
+              height: 15%;
+              background-color: var(--player-selected-cell-color);
+              transform: rotate(-45deg);
+              position:absolute;
+            }
           }
 
-          .winning-row-cell {
+          @keyframes ai-winner {
+            from   {background-color:#b80000; color: rgb(43, 43, 43);}
+            to {background-color: #760000; color: rgb(179, 179, 179);}
+          }
 
-            @keyframes ai-winner {
-              from   {background-color:#b80000; color: rgb(43, 43, 43);}
-              to {background-color: #760000; color: rgb(179, 179, 179);}
-            }
+          .winning-row-cell-ai {
+            animation: ai-winner 0.4s linear infinite alternate;
+          }
 
-            @keyframes player-winner {
+          @keyframes player-winner {
               from   {background-color:#059e00; color: rgb(66, 66, 66);}
               to {background-color: #055800; color: rgb(197, 197, 197);}
-            }
+          }
 
-            &.ai {
-              animation: ai-winner 0.4s linear infinite alternate;
-            }
-
-            &.player {
+          .winning-row-cell-player {
+            .figure-x-1,
+            .figure-x-2 {
               animation: player-winner 0.4s linear infinite alternate;
             }
           }

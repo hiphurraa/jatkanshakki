@@ -137,7 +137,7 @@ class AIPlayer {
         // Randomize the first half of the time
         if (this.firstMove){
             this.firstMove = false;
-            if (this.randomIntFromInterval(1, 2) == 1) {
+            if (this.randomIntFromInterval(1, 2) == 1 || true) {
                 let x, y;
                 do {
                     x = this.randomIntFromInterval(4, 9);
