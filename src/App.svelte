@@ -291,7 +291,7 @@ async function cellClicked(x, y) {
       box-shadow: 0 0 1rem black;
 
       button {
-        background-color: #13a913;
+        background-color: #007e00;
         color: white;
         border: none;
         margin-top: 1rem;
@@ -299,11 +299,9 @@ async function cellClicked(x, y) {
         cursor: pointer;
         font-size: 18px;
         border-radius: 0.2rem;
-
-
-
+        
         &:hover {
-          background-color: #13a313;
+          background-color: rgb(18, 160, 18);
         }
       }
     }
