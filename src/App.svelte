@@ -197,7 +197,8 @@ async function cellClicked(x, y) {
         {#each row as cell, x}
           <div class="gameGridCell"
             class:aiCursor={ aiCursor.x == x && aiCursor.y == y }
-            class:darkerColorCell={ (x + y) % 2 == 0 }
+            class:cell-color-1={ (x + y) % 2 == 0 }
+            class:cell-color-2={(x + y) % 2 != 0}
             on:click={() => cellClicked(x, y)}>
             {#if cell == "A"}
               <div class="ai-selected-cell">
@@ -238,8 +239,8 @@ async function cellClicked(x, y) {
 <style lang="scss">
   :root {
     --main-bg-color: #1a1a1a;
-    --board-bg-color: #2c352a;
-    --board-bg-color-2: rgb(84 84 84);
+    --cell-color-1: #2c352a;
+    --cell-color-2: rgb(84 84 84);
     --board-borders-color: #131313;
     --board-border-size: 1px;
     //--ai-selected-cell-color: #a800ff;
@@ -314,6 +315,7 @@ async function cellClicked(x, y) {
       flex-direction: column-reverse;
       max-height: var(--board-max-size);
       max-width: var(--board-max-size);
+      background-color: var(--board-borders-color);
 
       &.aspect-ratio-high {
         width: 90vh;
@@ -334,14 +336,14 @@ async function cellClicked(x, y) {
           height: 100%;
           width: 10%;
           box-shadow: 0 0 var(--board-border-size) var(--board-border-size) inset var(--board-borders-color);
-          background-color: var(--board-bg-color);
+          background-color: var(--cell-color-1);
           display: flex;
           align-items: center;
 		      justify-content: center;
           color: #555555;
 
-          &.darkerColorCell {
-            background-color: var(--board-bg-color-2);
+          &.cell-color-2 {
+            background-color: var(--cell-color-2);
           }
 
           &:hover {
@@ -373,12 +375,12 @@ async function cellClicked(x, y) {
               width: 71%;
               height: 71%;
               border-radius: 50%;
-              background-color: var(--board-bg-color);
+              background-color: var(--cell-color-1);
             }
           }
 
-          &.darkerColorCell .figure-o {
-            background-color: var(--board-bg-color-2);
+          &.cell-color-2 .figure-o {
+            background-color: var(--cell-color-2);
           }
 
           .player-selected-cell {
