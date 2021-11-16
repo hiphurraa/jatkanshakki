@@ -34,10 +34,10 @@ class AIPlayer {
         let randX = this.randomIntFromInterval(4, 9);
         let randY = this.randomIntFromInterval(4, 9);
 
-        do {
+        while(gameGrid[randY][randX] != null){
             randX = this.randomIntFromInterval(4, 9);
             randY = this.randomIntFromInterval(4, 9);
-        } while (gameGrid[randY][randX] != null)
+        }
 
         let priorityOne = [1, randX, randX];
         let priorityTwo = [1, this.randomIntFromInterval(4, 9), this.randomIntFromInterval(4, 9)];

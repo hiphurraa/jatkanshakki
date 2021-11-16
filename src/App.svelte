@@ -60,11 +60,14 @@ function gameOver(winner) {
 }
 
 async function moveAiCursor(newPoint) {
-  while (aiCursor.x != newPoint.x || aiCursor.y != newPoint.y) {
+  const MAX_I = 28;
+  let i = 0;
+  while ((aiCursor.x != newPoint.x || aiCursor.y != newPoint.y) && i <= MAX_I) {
       if (aiCursor.x > newPoint.x) aiCursor.x = aiCursor.x - 1;
       else if (aiCursor.x < newPoint.x) aiCursor.x = aiCursor.x + 1;
       else if (aiCursor.y > newPoint.y) aiCursor.y = aiCursor.y - 1;
       else if (aiCursor.y < newPoint.y) aiCursor.y = aiCursor.y + 1;
+      i += 1;
       await sleep(100);
   }
 }
@@ -179,12 +182,8 @@ async function cellClicked(x, y) {
         }
         isYourTurn = true;
       }, thinkingTimeOne + movingTimeOne + thinkingTimeTwo  + movingTimeTwo + thinkingTimeThree + movingTimeThree + thinkingTimeFinal );
+  }
 }
-
-  
-
-}
-
 </script>
 
 <main>
