@@ -240,7 +240,7 @@ async function cellClicked(x, y) {
     --main-bg-color: #1a1a1a;
     --cell-color-1: rgb(84 84 84);
     --cell-color-2: #2c352a;
-    --board-borders-color: #131313;
+    --board-borders-color: #1b1b1b;
     --board-border-size: 1px;
     //--ai-selected-cell-color: #a800ff;
     --ai-selected-cell-color: #ff5e00;
@@ -334,7 +334,7 @@ async function cellClicked(x, y) {
         .gameGridCell {
           height: 100%;
           width: 10%;
-          box-shadow: 0 0 var(--board-border-size) var(--board-border-size) inset var(--board-borders-color);
+          box-shadow: 0 0 0 var(--board-border-size) inset var(--board-borders-color);
           background-color: var(--cell-color-1);
           display: flex;
           align-items: center;
