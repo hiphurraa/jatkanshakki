@@ -1,11 +1,11 @@
 
 let priorities = {
 
-    "wwwww": -2,
-    "ewwww": 0,
-    "eewww": 0,
-    "eeeww": 0,
-    "eeeew": 0,
+    "wwwww": -5,
+    "ewwww": -4,
+    "eewww": -3,
+    "eeeww": -2,
+    "eeeew": -1,
     "eeeee": 0,
     "eeeeP": 0,
     "eeeeA": 0,

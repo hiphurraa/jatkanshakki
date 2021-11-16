@@ -1,4 +1,4 @@
-export default function CheckForSpecialDefensive(up, upRight, right, rightDown, down, downLeft, left, leftUp) {
+export default function checkForSpecialDefensive(up, upRight, right, rightDown, down, downLeft, left, leftUp) {
 
     var priority = 0;
 

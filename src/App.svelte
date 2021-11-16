@@ -189,11 +189,15 @@ async function cellClicked(x, y) {
 
 <main>
 
-  <div class={(width > height)? "gameGrid aspect-ratio-high" : "gameGrid aspect-ratio-low"}>
+  <div class="gameGrid"
+      class:aspect-ratio-high={ width > height }
+      class:aspect-ratio-low={ width < height }>
     {#each gameGrid as row, y}
       <div class="gameGridRow">
         {#each row as cell, x}
-          <div class={(aiCursor.x == x && aiCursor.y == y)? "gameGridCell aiCursor" : "gameGridCell"}
+          <div class="gameGridCell"
+            class:aiCursor={ aiCursor.x == x && aiCursor.y == y }
+            class:darkerColorCell={ (x + y) % 2 == 0 }
             on:click={() => cellClicked(x, y)}>
             {#if cell == "A"}
               <div class="ai-selected-cell">
@@ -234,11 +238,12 @@ async function cellClicked(x, y) {
 <style lang="scss">
   :root {
     --main-bg-color: #1a1a1a;
-    --board-bg-color: #181818;
-    --board-borders-color: #585858;
-    --board-border-size: 2px;
+    --board-bg-color: #2c352a;
+    --board-bg-color-2: rgb(84 84 84);
+    --board-borders-color: #131313;
+    --board-border-size: 1px;
     //--ai-selected-cell-color: #a800ff;
-    --ai-selected-cell-color: #ff0000;
+    --ai-selected-cell-color: #ff5e00;
     --player-selected-cell-color: #ffd400;
     //--player-selected-cell-color: #04ff00;
     --board-max-size: 800px;
@@ -328,12 +333,16 @@ async function cellClicked(x, y) {
         .gameGridCell {
           height: 100%;
           width: 10%;
-          box-shadow: 0 0 2px var(--board-border-size) inset var(--board-borders-color);
+          box-shadow: 0 0 var(--board-border-size) var(--board-border-size) inset var(--board-borders-color);
           background-color: var(--board-bg-color);
           display: flex;
           align-items: center;
 		      justify-content: center;
           color: #555555;
+
+          &.darkerColorCell {
+            background-color: var(--board-bg-color-2);
+          }
 
           &:hover {
             box-shadow: 0 0 3px 3px inset var(--player-selected-cell-color);
@@ -366,6 +375,10 @@ async function cellClicked(x, y) {
               border-radius: 50%;
               background-color: var(--board-bg-color);
             }
+          }
+
+          &.darkerColorCell .figure-o {
+            background-color: var(--board-bg-color-2);
           }
 
           .player-selected-cell {

@@ -1,4 +1,4 @@
-export default function CheckForSpecialOffenive(up, upRight, right, rightDown, down, downLeft, left, leftUp) {
+export default function checkForSpecialOffenive(up, upRight, right, rightDown, down, downLeft, left, leftUp) {
 
     var priority = 0;
 
