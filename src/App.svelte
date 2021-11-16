@@ -238,8 +238,8 @@ async function cellClicked(x, y) {
 <style lang="scss">
   :root {
     --main-bg-color: #1a1a1a;
-    --cell-color-1: #2c352a;
-    --cell-color-2: rgb(84 84 84);
+    --cell-color-1: rgb(84 84 84);
+    --cell-color-2: #2c352a;
     --board-borders-color: #131313;
     --board-border-size: 1px;
     //--ai-selected-cell-color: #a800ff;
