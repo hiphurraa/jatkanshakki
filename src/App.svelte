@@ -14,7 +14,16 @@
     x: null,
     y: null
   }
-  
+
+  let scoreAI = 0;
+  let scorePlayer = 0;
+
+  // Check browser support
+  // Retrieve
+  let retrievedScoreAI = localStorage.getItem("jatkanshakki-score-ai");
+  let retrievedScorePlayer = localStorage.getItem("jatkanshakki-score-player");
+  if (retrievedScoreAI != null) scoreAI = parseInt(retrievedScoreAI);
+  if (retrievedScorePlayer != null) scorePlayer = parseInt(retrievedScorePlayer)
 
   // AI starts
   //gameGrid = ai.play(gameGrid);
@@ -52,8 +61,18 @@
 
 function gameOver(winner) {
   gameGrid = game.showWinningRow(winner, gameGrid);
-  if (winner.row == "AAAAA") winnerPlayer = "AI";
-  else winnerPlayer = "You";
+  if (winner.row == "AAAAA"){
+    winnerPlayer = "AI";
+    scoreAI += 1;
+    localStorage.removeItem("jatkanshakki-score-ai");
+    localStorage.setItem("jatkanshakki-score-ai", scoreAI);
+  } 
+  else {
+    winnerPlayer = "You";
+    scorePlayer += 1;
+    localStorage.removeItem("jatkanshakki-score-player");
+    localStorage.setItem("jatkanshakki-score-player", scorePlayer);
+  }
   setTimeout(() => {
     isGameOver = true;
   }, 3000);
@@ -73,6 +92,9 @@ async function moveAiCursor(newPoint) {
 }
 
 async function cellClicked(x, y) {
+
+  console.log(localStorage);
+
   // Ignore if cell taken or not your turn
   if ((gameGrid[y][x] != null) || !isYourTurn || isGameOver) {
     return;
@@ -263,6 +285,16 @@ async function cellClicked(x, y) {
       <button on:click={() => resetGame()}>Play again</button>
     </div>
   {/if}
+
+  <div class="score-situation">
+    {#if scoreAI > scorePlayer}
+    <p class="ai-color">AI: {scoreAI}</p>
+    <p class="player-color">You: {scorePlayer}</p>
+    {:else}
+    <p class="player-color">You: {scorePlayer}</p>
+    <p class="ai-color">AI: {scoreAI}</p>
+    {/if}
+  </div>
 </main>
 
 <style lang="scss">
@@ -329,6 +361,27 @@ async function cellClicked(x, y) {
         &:hover {
           background-color: #2868ac;
         }
+      }
+    }
+
+    .score-situation {
+      position: absolute;
+      top: 0;
+      left: 0;
+      font-size: 17px;
+      line-height: 0.7em;
+      padding: 1rem 2rem;
+
+      @media only screen and (max-width: 600px) {
+        font-size: 12px;
+      }
+
+      .ai-color {
+        color: var(--ai-selected-cell-color);
+      }
+
+      .player-color {
+        color: var(--player-selected-cell-color);
       }
     }
 
