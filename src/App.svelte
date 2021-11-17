@@ -103,18 +103,48 @@ async function cellClicked(x, y) {
   let pointTwo = { x: priorityTwo[1], y: priorityTwo[2] };
   let pointThree = { x: priorityOne[1], y: priorityOne[2] };
 
-  let thinkingTimeOne = randomIntFromInterval(700, 1400);
-  let movingTimeOne = (Math.abs(pointOne.x - aiCursor.x) + Math.abs(pointOne.y - aiCursor.y)) * 100;
+  let moveTimeFromZeroToOne = (
+        ((aiCursor.x > pointOne.x)? aiCursor.x - pointOne.x : pointOne.x - aiCursor.x) + 
+        ((aiCursor.y > pointOne.y)? aiCursor.y - pointOne.y : pointOne.y - aiCursor.y) 
+      ) * 100;
 
-  let thinkingTimeTwo = randomIntFromInterval(500, 1000);
-  let movingTimeTwo = (Math.abs(pointTwo.x - pointOne.x) + Math.abs(pointTwo.y - pointOne.y)) * 100;
+  let moveTimeFromOneToTwo = ( 
+        ((pointOne.x > pointTwo.x)? pointOne.x - pointTwo.x : pointTwo.x - pointOne.x) + 
+        ((pointOne.y > pointTwo.y)? pointOne.y - pointTwo.y : pointTwo.y - pointOne.y)
+      ) * 100;
 
-  let thinkingTimeThree = randomIntFromInterval(500, 1000);
-  let movingTimeThree = (Math.abs(pointThree.x - pointTwo.x) + Math.abs(pointTwo.y - aiCursor.y)) * 100;
+  let moveTimeFromTwoToThree = ( 
+        ((pointTwo.x > pointThree.x)? pointTwo.x - pointThree.x : pointThree.x - pointTwo.x) + 
+        ((pointTwo.y > pointThree.y)? pointTwo.y - pointThree.y : pointThree.y - pointTwo.y)
+      ) * 100;
 
-  let thinkingTimeFinal = randomIntFromInterval(500, 1000);
+  let moveTimeFromZeroToTwo = ( 
+    ((aiCursor.x > pointTwo.x)? aiCursor.x - pointTwo.x : pointTwo.x - aiCursor.x) + 
+    ((aiCursor.y > pointTwo.y)? aiCursor.y - pointTwo.y : pointTwo.y - aiCursor.y)
+  ) * 100;
 
-  let pattern = randomIntFromInterval(1, 3);
+  let moveTimeFromZeroToThree = ( 
+    ((aiCursor.x > pointThree.x)? aiCursor.x - pointThree.x : pointThree.x - aiCursor.x) + 
+    ((aiCursor.y > pointThree.y)? aiCursor.y - pointThree.y : pointThree.y - aiCursor.y)
+  ) * 100;
+
+  let thinkingTimeShort = 500;
+  let thinkingTimeLong = 800;
+
+  let dice = randomIntFromInterval(1, 100);
+  let pattern;
+
+  switch(true) {
+    case (dice >= 92):
+      pattern = 3;
+      break;
+    case (dice > 75 && dice < 92):
+      pattern = 2;
+      break;
+    default:
+      pattern = 1;
+      break;
+  }
 
   if (priorityOne[0] >= 9999999999) pattern = 1;
 
@@ -122,7 +152,7 @@ async function cellClicked(x, y) {
     // First and final move
     setTimeout(() => {
         moveAiCursor(pointThree);
-      }, thinkingTimeOne);
+      }, thinkingTimeShort);
 
       setTimeout(() => {
         gameGrid[pointThree.y][pointThree.x] = "A";
@@ -132,19 +162,19 @@ async function cellClicked(x, y) {
           return;
         }
         isYourTurn = true;
-      }, thinkingTimeOne + movingTimeOne + thinkingTimeFinal);
+      }, thinkingTimeShort + moveTimeFromZeroToThree + thinkingTimeShort);
   }
 
   else if (pattern == 2) {
     // First move
     setTimeout(() => {
         moveAiCursor(pointTwo);
-    }, thinkingTimeOne);
+    }, thinkingTimeShort);
 
     // Second and final move
     setTimeout(() => {
       moveAiCursor(pointThree);
-    }, thinkingTimeOne + movingTimeOne + thinkingTimeTwo);
+    }, thinkingTimeShort + moveTimeFromZeroToTwo + thinkingTimeLong);
 
     setTimeout(() => {
       gameGrid[pointThree.y][pointThree.x] = "A";
@@ -154,24 +184,24 @@ async function cellClicked(x, y) {
         return;
       }
       isYourTurn = true;
-    }, thinkingTimeOne + movingTimeOne + thinkingTimeTwo  + movingTimeTwo + thinkingTimeFinal );
+    }, thinkingTimeShort + moveTimeFromZeroToTwo + thinkingTimeLong  + moveTimeFromTwoToThree + thinkingTimeShort );
   }
 
   else if (pattern == 3) {
     // First move
     setTimeout(() => {
         moveAiCursor(pointOne);
-      }, thinkingTimeOne);
+      }, thinkingTimeShort);
 
       // Second move
       setTimeout(() => {
         moveAiCursor(pointTwo);
-      }, thinkingTimeOne + movingTimeOne + thinkingTimeTwo);
+      }, thinkingTimeShort + moveTimeFromZeroToOne + thinkingTimeLong);
 
       // Third move
       setTimeout(() => {
         moveAiCursor(pointThree);
-      }, thinkingTimeOne + movingTimeOne + thinkingTimeTwo  + movingTimeTwo + thinkingTimeThree);
+      }, thinkingTimeShort + moveTimeFromZeroToOne + thinkingTimeLong  + moveTimeFromOneToTwo + thinkingTimeLong);
 
       setTimeout(() => {
         gameGrid[pointThree.y][pointThree.x] = "A";
@@ -181,7 +211,7 @@ async function cellClicked(x, y) {
           return;
         }
         isYourTurn = true;
-      }, thinkingTimeOne + movingTimeOne + thinkingTimeTwo  + movingTimeTwo + thinkingTimeThree + movingTimeThree + thinkingTimeFinal );
+      }, thinkingTimeShort + moveTimeFromZeroToOne + thinkingTimeLong  + moveTimeFromOneToTwo + thinkingTimeLong + moveTimeFromTwoToThree + thinkingTimeShort );
   }
 }
 </script>
@@ -276,7 +306,7 @@ async function cellClicked(x, y) {
 
     .game-over-message {
       position: absolute;
-      top: 50%;
+      bottom: 0;
       left: 50%;
       transform: translate(-50%, -50%);
       background-color:#343434;
@@ -349,7 +379,6 @@ async function cellClicked(x, y) {
           }
 
           &.aiCursor {
-            animation: ai-cursor-glow 1s linear infinite alternate;
             box-shadow: 0 0 3px 3px inset var(--ai-selected-cell-color)
           }
 
