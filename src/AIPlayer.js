@@ -22,6 +22,7 @@ class AIPlayer {
         let downLeft = this.scanner.scanDownLeft(gameGrid, x, y);
         let left = this.scanner.scanLeft(gameGrid, x, y);
         let leftUp = this.scanner.scanLeftUp(gameGrid, x, y);
+        console.log(up);
 
         let priority = priorities[up] + priorities[upRight] + priorities[right] + priorities[rightDown] + priorities[down] + 
             priorities[downLeft] + priorities[left] + priorities[leftUp] + checkForWildCards(up, upRight, right, rightDown, down, downLeft, left, leftUp);

@@ -1,10 +1,10 @@
 
 let priorities = {
 
-    "wwwww": -5,
-    "ewwww": -4,
-    "eewww": -3,
-    "eeeww": -2,
+    "wwwww": -9,
+    "ewwww": -9,
+    "eewww": -6,
+    "eeeww": -3,
     "eeeew": -1,
     "eeeee": 0,
     "eeeeP": 0,
@@ -183,10 +183,10 @@ let priorities = {
     "PPPee": 9,
     "PPPeP": 9,
     "PPPeA": 9,
-    "PPPPw": 999,
-    "PPPPe": 999,
+    "PPPPw": 999999,
+    "PPPPe": 999999,
     "PPPPP": 0,
-    "PPPPA": 999,
+    "PPPPA": 999999,
     "PPPAw": 9,
     "PPPAe": 9,
     "PPPAP": 9,
@@ -364,7 +364,7 @@ let priorities = {
     "AAAAw": 9999999999,
     "AAAAe": 9999999999,
     "AAAAP": 9999999999,
-    "AAAAA": 6
+    "AAAAA": 0
 
 }
 

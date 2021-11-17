@@ -260,29 +260,24 @@ async function cellClicked(x, y) {
       <div>
         {winnerPlayer} won!
       </div>
-      <button on:click={() => resetGame()}>Try again</button>
+      <button on:click={() => resetGame()}>Play again</button>
     </div>
   {/if}
 </main>
 
 <style lang="scss">
   :root {
-    --main-bg-color: #1a1a1a;
-    --cell-color-1: rgb(84 84 84);
-    --cell-color-2: #2c352a;
+    --main-bg-color: #0c0c0c;
+    --board-bg-color: black;
+    --cell-color-1: rgb(34 52 61);
+    --cell-color-2: #222f22;
     --board-borders-color: #1b1b1b;
-    --board-border-size: 1px;
-    //--ai-selected-cell-color: #a800ff;
-    --ai-selected-cell-color: #ff5e00;
-    --player-selected-cell-color: #ffd400;
-    //--player-selected-cell-color: #04ff00;
+    --board-border-size: 2px;
+    --ai-selected-cell-color: #00f4ff;
+    --player-selected-cell-color: #69ff00;
     --board-max-size: 800px;
 
-    @media only screen and (max-width: 650px) {
-      --board-border-size: 1px;
-    }
-
-    @media only screen and (max-height: 650px) {
+    @media only screen and (max-width: 600px) {
       --board-border-size: 1px;
     }
   }
@@ -309,7 +304,7 @@ async function cellClicked(x, y) {
       bottom: 0;
       left: 50%;
       transform: translate(-50%, -50%);
-      background-color:#343434;
+      background-color: #182f3c;
       color: white;
       padding: 1.3rem 1.5rem;
       display: flex;
@@ -321,7 +316,8 @@ async function cellClicked(x, y) {
       box-shadow: 0 0 1rem black;
 
       button {
-        background-color: #007e00;
+        background-color: #255f9b;
+        text-shadow: 0 0 0.5rem #262626;
         color: white;
         border: none;
         margin-top: 1rem;
@@ -331,18 +327,18 @@ async function cellClicked(x, y) {
         border-radius: 0.2rem;
         
         &:hover {
-          background-color: rgb(18, 160, 18);
+          background-color: #2868ac;
         }
       }
     }
 
 		.gameGrid {
-      box-shadow: 0 0 2vh 1vh black, 0 0 0 2px var(--board-borders-color);
+      box-shadow: 0 0 2vh 2vh var(--board-bg-color);
       display: flex;
       flex-direction: column-reverse;
       max-height: var(--board-max-size);
       max-width: var(--board-max-size);
-      background-color: var(--board-borders-color);
+      background-color: var(--board-bg-color);
 
       &.aspect-ratio-high {
         width: 90vh;
@@ -362,8 +358,9 @@ async function cellClicked(x, y) {
         .gameGridCell {
           height: 100%;
           width: 10%;
-          box-shadow: 0 0 0 var(--board-border-size) inset var(--board-borders-color);
           background-color: var(--cell-color-1);
+          box-shadow: 0 0 0 var(--board-border-size) inset var(--board-bg-color);
+          border-radius: 25%;
           display: flex;
           align-items: center;
 		      justify-content: center;
@@ -371,6 +368,7 @@ async function cellClicked(x, y) {
 
           &.cell-color-2 {
             background-color: var(--cell-color-2);
+            //box-shadow: 0 0 0 var(--board-border-size) inset var(--cell-color-2);
           }
 
           &:hover {
@@ -406,7 +404,7 @@ async function cellClicked(x, y) {
           }
 
           &.cell-color-2 .figure-o {
-            background-color: var(--cell-color-2);
+            background-color: var(--cell-color-1);
           }
 
           .player-selected-cell {
@@ -432,8 +430,8 @@ async function cellClicked(x, y) {
           }
 
           @keyframes ai-winner {
-            from   {background-color:#b80000; color: rgb(43, 43, 43);}
-            to {background-color: #760000; color: rgb(179, 179, 179);}
+            from   {background-color: var(--ai-selected-cell-color);}
+            to {background-color: #00685f;}
           }
 
           .winning-row-cell-ai {
@@ -441,8 +439,8 @@ async function cellClicked(x, y) {
           }
 
           @keyframes player-winner {
-              from   {background-color:#059e00; color: rgb(66, 66, 66);}
-              to {background-color: #055800; color: rgb(197, 197, 197);}
+              from   {background-color: var(--player-selected-cell-color)}
+              to {background-color: #055800;}
           }
 
           .winning-row-cell-player {
