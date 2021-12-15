@@ -303,7 +303,7 @@ async function cellClicked(x, y) {
   <div class="game-tutorial-message">
     <div>
       <img src="jatkanshakki_tuto.jpg" alt="5 in a row">
-      <p>First player to get five in a row wins!</p>
+      <p>The first player to get five in a row wins!</p>
     </div>
     <button on:click={() => showTutorial = false}>Ok, let's play!</button>
   </div>
