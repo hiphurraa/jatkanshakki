@@ -8,6 +8,7 @@
   var width = window.innerWidth;
   let gameGrid = createArray(15, 15);
   var isGameOver = false;
+  let showTutorial = true;
   let isYourTurn = true;
   let winnerPlayer = "";
   let aiCursor = {
@@ -17,7 +18,7 @@
 
   let scoreAI = 0;
   let scorePlayer = 0;
-
+  
   // Check browser support
   // Retrieve
   let retrievedScoreAI = localStorage.getItem("jatkanshakki-score-ai");
@@ -93,6 +94,8 @@ async function moveAiCursor(newPoint) {
 
 async function cellClicked(x, y) {
 
+  if(showTutorial) return;
+
   console.log(localStorage);
 
   // Ignore if cell taken or not your turn
@@ -158,10 +161,10 @@ async function cellClicked(x, y) {
 
   switch(true) {
     case (dice >= 92):
-      pattern = 3;
+      pattern = 1;
       break;
     case (dice > 75 && dice < 92):
-      pattern = 2;
+      pattern = 1;
       break;
     default:
       pattern = 1;
@@ -277,15 +280,6 @@ async function cellClicked(x, y) {
 
   </div>
 
-  {#if isGameOver}
-    <div class="game-over-message">
-      <div>
-        {winnerPlayer} won!
-      </div>
-      <button on:click={() => resetGame()}>Play again</button>
-    </div>
-  {/if}
-
   <div class="score-situation">
     {#if scoreAI > scorePlayer}
     <p class="ai-color">AI: {scoreAI}</p>
@@ -295,17 +289,36 @@ async function cellClicked(x, y) {
     <p class="ai-color">AI: {scoreAI}</p>
     {/if}
   </div>
+
+  {#if isGameOver}
+    <div class="game-over-message">
+      <div>
+        {winnerPlayer} won!
+      </div>
+      <button on:click={() => resetGame()}>Let's play again!</button>
+    </div>
+  {/if}
+
+  {#if showTutorial}
+  <div class="game-tutorial-message">
+    <div>
+      <img src="jatkanshakki_tuto.jpg" alt="5 in a row">
+      <p>First player to get five in a row wins!</p>
+    </div>
+    <button on:click={() => showTutorial = false}>Ok, let's play!</button>
+  </div>
+{/if}
 </main>
 
 <style lang="scss">
   :root {
-    --main-bg-color: #0c0c0c;
-    --board-bg-color: black;
-    --cell-color-1: rgb(34 52 61);
-    --cell-color-2: #222f22;
-    --board-borders-color: #1b1b1b;
+    --main-bg-color: #000618;
+    --board-bg-color: #00458c;
+    --cell-color-1: rgb(7, 3, 24);
+    --cell-color-2: var(--cell-color-1);
+    --board-borders-color: #143d6a;
     --board-border-size: 2px;
-    --ai-selected-cell-color: #00f4ff;
+    --ai-selected-cell-color: #00bfff;
     --player-selected-cell-color: #69ff00;
     --board-max-size: 800px;
 
@@ -333,10 +346,10 @@ async function cellClicked(x, y) {
 
     .game-over-message {
       position: absolute;
-      bottom: 0;
+      top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      background-color: #182f3c;
+      background-color: #00517e;
       color: white;
       padding: 1.3rem 1.5rem;
       display: flex;
@@ -348,18 +361,61 @@ async function cellClicked(x, y) {
       box-shadow: 0 0 1rem black;
 
       button {
-        background-color: #255f9b;
+        background-color: #002e5c;
         text-shadow: 0 0 0.5rem #262626;
         color: white;
         border: none;
         margin-top: 1rem;
-        padding: 0.6rem 1.3rem;
+        padding: 0.8rem 1.6rem;
         cursor: pointer;
         font-size: 18px;
         border-radius: 0.2rem;
         
         &:hover {
-          background-color: #2868ac;
+          background-color: #00254a;
+        }
+      }
+    }
+
+    .game-tutorial-message {
+      width: 80%;
+      max-width: 450px;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: #00517e;
+      color: white;
+      padding: 1.3rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      border-radius: 0.3rem;
+      font-size: 18px;
+      box-shadow: 0 0 1rem black;
+
+      img {
+        width: 100%
+      }
+
+      p {
+        text-align: center;
+      }
+
+      button {
+        background-color: #002e5c;
+        text-shadow: 0 0 0.5rem #262626;
+        color: white;
+        border: none;
+        margin-top: 1rem;
+        padding: 0.8rem 1.6rem;
+        cursor: pointer;
+        font-size: 18px;
+        border-radius: 0.2rem;
+        
+        &:hover {
+          background-color: #00254a;
         }
       }
     }
@@ -370,7 +426,7 @@ async function cellClicked(x, y) {
       left: 0;
       font-size: 17px;
       line-height: 0.7em;
-      padding: 1rem 2rem;
+      padding: 1rem 0 0 2rem;
 
       @media only screen and (max-width: 600px) {
         font-size: 12px;
@@ -382,11 +438,12 @@ async function cellClicked(x, y) {
 
       .player-color {
         color: var(--player-selected-cell-color);
+        margin-bottom: 0
       }
     }
 
 		.gameGrid {
-      box-shadow: 0 0 2vh 2vh var(--board-bg-color);
+      box-shadow: 0 0 13vh 1vh var(--board-bg-color);
       display: flex;
       flex-direction: column-reverse;
       max-height: var(--board-max-size);
@@ -412,8 +469,8 @@ async function cellClicked(x, y) {
           height: 100%;
           width: 10%;
           background-color: var(--cell-color-1);
-          box-shadow: 0 0 0 var(--board-border-size) inset var(--board-bg-color);
-          border-radius: 25%;
+          box-shadow: 0 0 0 var(--board-border-size) inset var(--board-borders-color);
+          border-radius: 0;
           display: flex;
           align-items: center;
 		      justify-content: center;
@@ -484,7 +541,7 @@ async function cellClicked(x, y) {
 
           @keyframes ai-winner {
             from   {background-color: var(--ai-selected-cell-color);}
-            to {background-color: #00685f;}
+            to {background-color: #006181}
           }
 
           .winning-row-cell-ai {
@@ -493,7 +550,7 @@ async function cellClicked(x, y) {
 
           @keyframes player-winner {
               from   {background-color: var(--player-selected-cell-color)}
-              to {background-color: #055800;}
+              to {background-color: #347e00}
           }
 
           .winning-row-cell-player {
