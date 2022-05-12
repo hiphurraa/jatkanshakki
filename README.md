@@ -1,6 +1,6 @@
 ## Get started
 
-Install the dependencies...
+Install the dependencies... (You need Nodejs installed on your system)
 
 ```bash
 npm install
